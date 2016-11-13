@@ -18,6 +18,8 @@ def get_wiki(text,mic):
     mic.say("What would you like to learn about?")
     # get the user voice input as string
     article_title = mic.activeListen()
+    # wikipedia api requires lowercased title
+    article_title = article_title.lower()
     # make a call to the Wikipedia API
     request = Request('https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles='+article_title)
     try:
@@ -32,13 +34,4 @@ def get_wiki(text,mic):
 
 
 def isValid(text):
-    wiki= bool(re.search(r'\bWiki\b',text, re.IGNORECASE))
-    # Add 'Wicky' because the STT engine recognizes it quite often
-    wicky= bool(re.search(r'\bwicky\b',text, re.IGNORECASE))
-    article= bool(re.search(r'\barticle\b',text, re.IGNORECASE))
-
-    if wicky or wiki or article:
-        return True
-    else:
-        return False
-
+    return bool(re.search(r'\b(Wiki|wicky|article)\b',text, re.IGNORECASE))
